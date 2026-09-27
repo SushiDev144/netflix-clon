@@ -26,7 +26,7 @@ export default function SearchPage() {
       <Navbar />
       <div className="pt-32 pb-40 px-4 md:px-12">
         <h2 className="text-white text-xl md:text-2xl font-semibold mb-4">
-          Search Results for: <span className="text-zinc-400 font-normal">"{q || ''}"</span>
+            Search Results for: <span className="text-zinc-400 font-normal">&quot;{q}&quot;</span>
         </h2>
         {results.length > 0 ? (
           <MovieList title="Matching Movies" data={results} />
