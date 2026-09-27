@@ -97,7 +97,7 @@ const MovieCard: FC<MovieCardProps> = ({ data }) => {
 								>
 									<AiOutlineInfoCircle
 										className="text-white group-hover/item:text-neutral-300 "
-										size={130}
+										size={25}
 									/>
 								</div>
 							</div>

@@ -6,6 +6,7 @@ import { BsBell, BsChevronDown, BsSearch } from "react-icons/bs";
 import MobileMenu from "./MobileMenu";
 import { useCallback, useEffect, useState } from "react";
 import AccountMenu from "./AccountMenu";
+import { useRouter } from "next/router";
 
 const TOP_OFFSET = 66;
 
@@ -13,6 +14,9 @@ function Navbar() {
 	const [showMobileMenu, setShowMobileMenu] = useState(false);
 	const [showAccountMenu, setShowAccountMenu] = useState(false);
 	const [showBackground, setShowBackground] = useState(false);
+	const [showSearch, setShowSearch] = useState(false);
+	const [searchQuery, setSearchQuery] = useState("");
+	const router = useRouter();
 
 	useEffect(() => {
 		const handleScroll = () => {
@@ -38,6 +42,13 @@ function Navbar() {
 		setShowAccountMenu((current) => !current);
 	}, []);
 
+	const handleSearchSubmit = (e: React.FormEvent) => {
+		e.preventDefault();
+		if (searchQuery.trim()) {
+			router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+		}
+	};
+
 	return (
 		<nav className="w-full fixed z-40">
 			<div
@@ -58,19 +69,20 @@ function Navbar() {
 					}`}
 			>
 				<Image
-					className="lg:h-7"
+					className="lg:h-7 cursor-pointer"
 					src={logo}
 					alt="Website-Logo"
 					width={120}
 					height={120}
+					onClick={() => router.push('/')}
 				/>
 				<div className="flex-row ml-8 gap-7 hidden lg:flex">
-					<NavbarItem label="Home" />
-					<NavbarItem label="Series" />
-					<NavbarItem label="Films" />
-					<NavbarItem label="New & Popular" />
-					<NavbarItem label="My List" />
-					<NavbarItem label="Browse by languages" />
+					<NavbarItem label="Home" href="/" />
+					<NavbarItem label="Series" href="/series" />
+					<NavbarItem label="Films" href="/films" />
+					<NavbarItem label="New & Popular" href="/#new" />
+					<NavbarItem label="My List" href="/#favorites" />
+					<NavbarItem label="Browse by languages" href="/#languages" />
 				</div>
 				<div
 					className="flex flex-row gap-2 items-center ml-2 md:ml-8 cursor-pointer relative lg:hidden"
@@ -85,9 +97,25 @@ function Navbar() {
 					<MobileMenu visible={showMobileMenu} />
 				</div>
 				<div className="flex flex-row md:ml-auto m-0 gap-2 md:gap-7 items-center">
-					<div className="text-gray-200 hover:text-gray-300 cursor-pointer transition">
-						<BsSearch className="w-6" size={18} />
-					</div>
+					<form onSubmit={handleSearchSubmit} className="flex items-center gap-2">
+						<button 
+							type="button" 
+							onClick={() => setShowSearch(!showSearch)} 
+							className="text-gray-200 hover:text-gray-300 cursor-pointer transition"
+						>
+							<BsSearch size={18} />
+						</button>
+						{showSearch && (
+							<input 
+								type="text"
+								placeholder="Titles, genres..."
+								value={searchQuery}
+								onChange={(e) => setSearchQuery(e.target.value)}
+								className="bg-black/70 border border-white/20 text-white text-sm px-3 py-1 rounded outline-none transition focus:border-white"
+								autoFocus
+							/>
+						)}
+					</form>
 					<div className="text-gray-200 hover:text-gray-300 cursor-pointer transition">
 						<BsBell className="w-6" size={18} />
 					</div>
